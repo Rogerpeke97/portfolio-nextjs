@@ -1,3 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[data-theme="dark"] {
+  --separator: white;
+
+}
+[data-theme="light"] {
+  --separator: black;
+}
+
 html,
 body {
   padding: 0;
