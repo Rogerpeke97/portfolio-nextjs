@@ -1,0 +1,10 @@
+[data-theme="dark"] {
+  --separator: white;
+  --card: #1c1d25;
+
+}
+[data-theme="light"] {
+  --separator: black;
+  --card: #112240;
+}
+

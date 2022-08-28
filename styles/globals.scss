@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "./variables.css";
+@import "./animations.scss";
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: SilkScreen, cursive !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+.SilkScreen {
+  font-family: 'Silkscreen', cursive;
+}
+
+.h-screen {
+  height: calc(100vh - 6rem); // 6rem = navbar height
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+@media (prefers-color-scheme: dark) {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    color: white;
+  }
+}

@@ -1,0 +1,29 @@
+.animated-text-dark {
+  cursor: default;
+  text-shadow: 0 5px 0 rgba(0, 0, 0, 1),
+  0 5px 20px rgba(0, 0, 0, .2),
+  0 10px 15px rgba(0, 0, 0, .2),
+  0 6px 10px rgba(0, 0, 0, .2);
+  animation: animated-text 1s ease-in-out infinite;
+  transition: all .3s ease-in-out;
+  &:hover {
+    text-shadow: -5px 5px 0 rgba(0, 0, 0, 1),
+      0 5px 20px rgba(0, 0, 0, .2),
+      0 10px 15px rgba(0, 0, 0, .5),
+      5px 10px 10px rgba(0, 0, 0, .5);
+  }
+}
+
+.animated-text-bounce{
+  display: inline-block;
+  animation: textBounceJump 1s infinite;
+  animation-delay: calc(.1s * var(--i));
+}
+@keyframes textBounceJump {
+  0%,40%,100% {
+      transform: translateY(0)
+  }
+  20% {
+      transform: translateY(-20px)
+  }
+}

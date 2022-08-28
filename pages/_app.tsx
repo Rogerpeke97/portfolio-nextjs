@@ -1,7 +1,8 @@
-import '../styles/globals.css'
+import '../styles/globals.scss'
 import type { AppProps } from 'next/app'
 import { ChakraProvider, useColorMode } from '@chakra-ui/react'
 import { useEffect } from 'react'
+import StoredGameSceneWrapper from '../store/waves/WavesStore'
 
 function MyApp({ Component, pageProps }: AppProps) {
   const updateColorModeForTailwind = () => {
@@ -20,9 +21,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     }
   }, [])
   return(
-    <ChakraProvider>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <StoredGameSceneWrapper>
+      <ChakraProvider>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </StoredGameSceneWrapper>
   )
 }
 
