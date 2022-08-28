@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import IMDLogo from '../components/atoms/logos/IMDLogo'
+import IMDAboutMe from '../components/modules/IMDAboutMe'
 import IMDIntroduction from '../components/modules/IMDIntroduction'
 import IMDMyProjects from '../components/modules/IMDMyProjects'
 import IMDNavBar from '../components/molecules/navbars/IMDNavBar'
@@ -14,6 +15,7 @@ const Home: NextPage = () => {
         </div>
       </IMDNavBar>
       <IMDIntroduction className="w-1/2 3xlAndDown:w-full" />
+      <IMDAboutMe className="w-1/2 3xlAndDown:w-full px-9 smAndDown:px-3"/>
       <IMDMyProjects className="w-1/2 3xlAndDown:w-full px-9 smAndDown:px-3" />
     </div>
   )
