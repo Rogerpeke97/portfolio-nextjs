@@ -52,8 +52,8 @@ const IMDProjectCard = ({ className="", children, project, inverseOrder=false }:
               }
             </div>
             <div className={`mt-5 flex ${inverseOrder ? 'justify-end' : ''}`}>
-              <IMDIconButton size="lg" className={`${inverseOrder ? 'ml-4' : 'mr-4'} !text-2xl`} icon={<FontAwesomeIcon icon={faGithub} />} href={project.github[0]} />
-              <IMDIconButton size="lg" className={`${inverseOrder ? 'ml-4' : 'mr-4'} !text-2xl`} icon={<FontAwesomeIcon icon={faExternalLink} />} href={project.github[0]} />
+              <IMDIconButton size="lg" ariaLabel={project.title} className={`${inverseOrder ? 'ml-4' : 'mr-4'} !text-2xl`} icon={<FontAwesomeIcon icon={faGithub} />} href={project.github[0].link} />
+              <IMDIconButton size="lg" ariaLabel={project.title} className={`${inverseOrder ? 'ml-4' : 'mr-4'} !text-2xl`} icon={<FontAwesomeIcon icon={faExternalLink} />} href={project.site} />
             </div>
           </div>
         </div>

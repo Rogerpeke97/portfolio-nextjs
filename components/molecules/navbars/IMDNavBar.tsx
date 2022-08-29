@@ -17,7 +17,7 @@ const IMDNavBar = ({ className="", children, onClick }:
         <div className="flex w-1/2 3xlAndDown:w-full items-center justify-between">
           {children}
           <div>
-            <IMDIconButton size="lg" className="mr-8 !text-2xl" ariaLabel="Github" title="Go to my github" icon={<FontAwesomeIcon icon={faGithub} />} />
+            <IMDIconButton size="lg" className="mr-8 !text-2xl" ariaLabel="Github" href="https://github.com/Rogerpeke97" title="Go to my github" icon={<FontAwesomeIcon icon={faGithub} />} />
             <IMDIconButton size="lg" className="!text-2xl" ariaLabel="Color mode" title="Toggle dark/light mode" onClick={toggleModeAndTriggerStorageEvent} icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />} />
           </div>
         </div>
