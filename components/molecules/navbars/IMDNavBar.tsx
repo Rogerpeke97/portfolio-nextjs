@@ -13,7 +13,7 @@ const IMDNavBar = ({ className="", children, onClick }:
       window.dispatchEvent(new Event('storage'))
     }
     return(
-      <nav className={`flex bg-background border-b-2 items-center justify-center border-separator h-24 z-50 fixed inset-0 transition ease-out duration-300 px-3 ${className}`}>
+      <nav className={`flex bg-background border-b-2 items-center justify-center border-separator h-24 z-40 fixed inset-0 transition ease-out duration-300 px-3 ${className}`}>
         <div className="flex w-1/2 3xlAndDown:w-full items-center justify-between">
           {children}
           <div>

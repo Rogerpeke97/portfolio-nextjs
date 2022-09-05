@@ -6,7 +6,7 @@ import IMDProjectCard from "../molecules/cards/IMDProjectCard"
 const IMDMyProjects = ({ className="", children }: 
 { className?: string, children?: Array<ReactElement> | ReactElement | string }) => {
   return(
-    <div className={`py-24 flex flex-col ${className}`}>
+    <div className={`py-16 flex flex-col ${className}`}>
       <IMDAnimatedTextBounce className="text-6xl xs:text-4xl" letterClass="underline" text="Projects:" />
       <div className="mt-8 flex flex-col items-center justify-center">
         {
