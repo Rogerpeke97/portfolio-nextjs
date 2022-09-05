@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { fragmentShaderParticle, vertexShaderParticle } from 'utils/game/shaders/sphereParticle';
 
 export class WavesClass {
   renderer: THREE.WebGLRenderer
