@@ -7,7 +7,7 @@ export const validateReason = (reason: string) => {
 }
 
 export const validateEmail = (email: string) => {
-  return /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email)
+  return /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/.test(email)
 }
 
 export const inputsReducer = (state: typeof INPUTS, action: {type: string, payload: string}) => {
@@ -16,8 +16,9 @@ export const inputsReducer = (state: typeof INPUTS, action: {type: string, paylo
   if (inputToUpdate) {
     inputToUpdate.isValid = inputToUpdate.validate(action.payload)
     inputToUpdate.value = action.payload
+    return stateCopy
   }
-  return stateCopy
+  return state
 }
 
 export const INPUTS = [
