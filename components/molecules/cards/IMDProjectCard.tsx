@@ -28,8 +28,8 @@ const IMDProjectCard = ({ className="", children, project, inverseOrder=false }:
             </div>
           </div>
           <div className="mt-5 flex">
-            <IMDIconButton size="lg" className="mr-4 !text-2xl" icon={<FontAwesomeIcon icon={faGithub} />} href={project.github[0]} />
-            <IMDIconButton size="lg" className="mr-4 !text-2xl" icon={<FontAwesomeIcon icon={faExternalLink} />} href={project.github[0]} />
+            <IMDIconButton ariaLabel={project.title} size="lg" className="mr-4 !text-2xl" icon={<FontAwesomeIcon icon={faGithub} />} href={project.github[0].link} />
+            <IMDIconButton ariaLabel={project.title} size="lg" className="mr-4 !text-2xl" icon={<FontAwesomeIcon icon={faExternalLink} />} href={project.site} />
           </div>
         </div>
       )
