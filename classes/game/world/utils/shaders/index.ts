@@ -1,7 +1,7 @@
 export function vertexShaderParticle(){
   return `
-  varying vec3 vColor;
-  attribute vec3 customParticleColor;
+    varying vec3 vColor;
+    attribute vec3 customParticleColor;
     void main(){
       vColor = customParticleColor;
       //we cast the vec3 attribute position into a vec4
@@ -22,7 +22,7 @@ export function vertexShaderParticle(){
       //apply the projectionMatrix 
       vec4 perspectiveSpace = projectionMatrix * viewPosition;
       //finally we write the result into a built-in GLSL variable
-      gl_PointSize = 30.0;
+      gl_PointSize = 80.0;
       gl_Position = perspectiveSpace; 
     }
   `
@@ -30,13 +30,25 @@ export function vertexShaderParticle(){
 
 export function fragmentShaderParticle(){
   return `
-  uniform float time;
-  uniform vec2 resolution;
-  uniform sampler2D particleTexture;
-  varying vec3 vColor;
+    uniform float time;
+    uniform vec2 resolution;
+    uniform sampler2D particleTexture;
+    uniform bool hasToExplode;
+    varying vec3 vColor;
+
     void main(){
-      vec2 normalizedCoordinates = gl_FragCoord.xy / resolution.xy;
-      gl_FragColor = vec4(vColor, 1.0);
+      vec2 uv = gl_PointCoord.xy - vec2(0.5);
+
+      float d = length(uv);
+      d = sin(d * 20.0 + time) / 20.0;
+      d = abs(d);
+
+      d = 0.03 / d;
+
+      vec3 modifiedColor = vColor;
+      modifiedColor *= d;
+
+      gl_FragColor = vec4(modifiedColor, 1.0);
       gl_FragColor = gl_FragColor * texture2D(particleTexture, gl_PointCoord);
     }
   `

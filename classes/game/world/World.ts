@@ -81,6 +81,11 @@ export class World {
   }
   private moveParticles () {
     const particlesSystem = this.scene.getObjectByName('particlesSystem') as THREE.Points
+    //@ts-ignore
+    if (particlesSystem.material?.uniforms) {
+      //@ts-ignore
+      particlesSystem.material.uniforms.time.value = this.clock.getElapsedTime()
+    }
     const particlesPosition = this.particles.getAttribute('position')
     const vectorCollision = new THREE.Vector3()
     let trackedParticle
@@ -216,7 +221,8 @@ export class World {
       uniforms: {
         time: { value: this.clock.getElapsedTime() },
         resolution: { value: this.resolution },
-        particleTexture: { value: particleTexture }
+        particleTexture: { value: particleTexture },
+        hasToExplode: { value: false }
       },
       vertexShader: vertexShaderParticle(),
       fragmentShader: fragmentShaderParticle(),
