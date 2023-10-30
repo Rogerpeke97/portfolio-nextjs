@@ -53,3 +53,62 @@ export function fragmentShaderParticle(){
     }
   `
 }
+
+export function sunFragmentShader() {
+  return `
+    uniform vec3 sphereCenter;
+    uniform float sphereRadius;
+    // uniform float sphereAtmosphereRadius;
+    uniform vec2 resolution;
+    uniform float fov;
+
+    vec3 get_ray_dir(float fov, vec2 resolution, vec2 fragCoord) {
+      float aspect_ratio = resolution.x / resolution.y;
+      
+      vec2 frag_coord_center = fragCoord - vec2(fragCoord.x * 0.5, fragCoord.y * 0.5);
+    
+      vec2 pixel_coord_center = frag_coord_center / resolution * 0.5;
+    
+      pixel_coord_center.x *= aspect_ratio;
+    
+      float z = 1.0 / tan(radians(fov * 0.5));
+    
+      return normalize(vec3(pixel_coord_center, -z));
+    }
+    
+    
+    bool ray_intersects_sphere(vec3 eye, vec3 ray_dir, float sphere_radius, vec3 sphere_center) {
+      /*
+        Parametric equation for ray X = xo + xd*t Y = yo + yd*t Z = zo + zd*t
+        (x-a)^2 + (y-b)^2 + (z-c)^2 = r^2 equation for sphere. Replace x, y, z with parametric equation
+        
+        A = (xd^2 + yd^2 + zd^2) // same as dot product of itself
+        B = [2[xd * (xo - a) + yd * (yo - b) + zd *(zo - c)]]
+        C = [(xo - a)^2 + (yo - b)^2 + (zo - c^)2 - r^2]
+      */
+      float a = dot(ray_dir, ray_dir);
+      float b = 2.0 * dot(ray_dir, eye - sphere_center);
+      float c = dot(eye - sphere_center, eye - sphere_center) - sphere_radius * sphere_radius;
+    
+      float discriminant = b * b - 4.0 * a * c;
+      if (discriminant < 0.0) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+    
+    
+    void main()
+    {
+      vec3 ray_dir = get_ray_dir(fov, resolution.xy, gl_FragCoord.xy);
+    
+      bool intersects = ray_intersects_sphere(cameraPosition, ray_dir, sphereRadius, sphereCenter);
+      if(intersects) {
+          gl_FragColor = vec4(0.1, 0.2, 0.3, 1.0);
+          return;
+      }
+      gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    }
+  `;
+}

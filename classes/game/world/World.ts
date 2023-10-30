@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { fragmentShaderParticle, vertexShaderParticle } from './utils/shaders';
+import { SunAndMoon } from './SunAndMoon';
 
 export class World {
   renderer: THREE.WebGLRenderer
@@ -9,9 +10,10 @@ export class World {
   scene: THREE.Scene = new THREE.Scene()
   clock: THREE.Clock = new THREE.Clock()
   particles = new THREE.BufferGeometry()
+  sunAndMoon: SunAndMoon;
   trackedStillParticles: Array<{ index: number, position: THREE.Vector3, wasSetAt: number, angleOfRotation: number }> = []
   animationFrameId: number = 0
-  observerOfCanvasContainer: ResizeObserver
+  observerOfCanvasContainer!: ResizeObserver
   controls: OrbitControls
   canvasContainer = {
     width: 0,
@@ -47,6 +49,7 @@ export class World {
     this.updateRendererAndCamera()
     this.trackWindowAndContainerResize()
     this.checkIfCanvasIsInDOM()
+    this.sunAndMoon = new SunAndMoon(this.scene, this.clock, this.resolution)
   }
   private addPlanet() {
     const planetTexture = new THREE
@@ -198,6 +201,9 @@ export class World {
   private renderScene() {
     this.renderer.render(this.scene, this.camera)
     this.moveParticles()
+    if(this.sunAndMoon?.update) {
+      this.sunAndMoon.update()
+    }
     this.animationFrameId = requestAnimationFrame(this.renderScene.bind(this))
   }
   private addAmbientParticles () {
