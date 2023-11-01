@@ -1,19 +1,32 @@
 import * as THREE from 'three';
-import { sunFragmentShader } from './utils/shaders';
+import { sunFragmentShader, sunVertexShader } from './utils/shaders';
 
 
 
 export class SunAndMoon {
   scene: THREE.Scene;
+  camera: THREE.Camera;
   clock: THREE.Clock;
   resolution: THREE.Vector2;
+  fov: number;
+  farPlane: number;
   SPHERE_RADIUS = 20;
-  STARTING_POSITION = new THREE.Vector3(30, 4, 60);
+  STARTING_POSITION = new THREE.Vector3(0, 5, -60);
 
-  constructor(scene: THREE.Scene, clock: THREE.Clock, resolution: THREE.Vector2) {
+  constructor(
+    scene: THREE.Scene, 
+    clock: THREE.Clock,
+    camera: THREE.Camera,
+    resolution: THREE.Vector2, 
+    fov: number,
+    farPlane: number,
+  ) {
     this.scene = scene;
     this.clock = clock;
     this.resolution = resolution;
+    this.fov = fov;
+    this.camera = camera;
+    this.farPlane = farPlane;
     this.createSun();
   }
 
@@ -25,8 +38,10 @@ export class SunAndMoon {
         resolution: { value: this.resolution },
         sphereCenter: { value: this.STARTING_POSITION },
         sphereRadius: { value: this.SPHERE_RADIUS },
-        fov: { value: 45 },
+        fov: { value: this.fov },
+        camQuaternion: { value: this.camera.quaternion },
       },
+      // vertexShader: sunVertexShader(),
       fragmentShader: sunFragmentShader(),
     })
     const sun = new THREE.Mesh(sunGeometry, sunMaterial)
@@ -38,8 +53,6 @@ export class SunAndMoon {
 
   public update() {
     const sun = this.scene.getObjectByName('sun') as THREE.Mesh
-    console.log()
-    // console.log("sun", sun)
     //@ts-ignore
     sun.material.uniforms.time.value = this.clock.getElapsedTime()
   }
