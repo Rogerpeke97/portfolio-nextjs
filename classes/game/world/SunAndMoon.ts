@@ -11,7 +11,8 @@ export class SunAndMoon {
   fov: number;
   farPlane: number;
   SPHERE_RADIUS = 20;
-  STARTING_POSITION = new THREE.Vector3(0, 5, -60);
+  STARTING_POSITION = new THREE.Vector3(0, 0, -60);
+  increasingVal = 0.45;
 
   constructor(
     scene: THREE.Scene, 
@@ -39,7 +40,6 @@ export class SunAndMoon {
         sphereCenter: { value: this.STARTING_POSITION },
         sphereRadius: { value: this.SPHERE_RADIUS },
         fov: { value: this.fov },
-        camQuaternion: { value: this.camera.quaternion },
       },
       // vertexShader: sunVertexShader(),
       fragmentShader: sunFragmentShader(),
@@ -55,5 +55,14 @@ export class SunAndMoon {
     const sun = this.scene.getObjectByName('sun') as THREE.Mesh
     //@ts-ignore
     sun.material.uniforms.time.value = this.clock.getElapsedTime()
+    if (sun.position.x > 55) {
+      this.increasingVal *= -1
+    }
+    if (sun.position.x < -55) {
+      this.increasingVal *= -1
+    }
+    sun.position.x += this.increasingVal
+    // sun.position.y += this.increasingVal
+    // sun.position.z += this.increasingVal
   }
 }

@@ -70,8 +70,8 @@ export function sunFragmentShader() {
     uniform vec3 sphereCenter;
     uniform float sphereRadius;
     // uniform float sphereAtmosphereRadius;
-    uniform vec3 camQuaternion;
     uniform vec2 resolution;
+    // uniform float time;
     uniform float fov;
     const float MAX = 1000000.0;
 
@@ -86,49 +86,8 @@ export function sunFragmentShader() {
     
       float z = 1.0 / tan(radians(fov * 0.5));
     
-      return normalize(vec3(pixel_coord_center, -z));
+      return vec3(pixel_coord_center, -z);
     }
-
-    vec3 rotateVectorWithQuaternion(vec4 quaternion, vec3 vector) {
-      vec3 unit = quaternion.xyz;
-
-      float scalar = quaternion.w;
-
-      vec3 vector_prime = 2.0 * dot(unit, vector) * unit + (scalar * scalar - dot(unit, unit)) * vector + 2.0 * scalar * cross(unit, vector);
-      return vector_prime;
-    }
-
-    vec3 rotateVector(vec3 euler, vec3 vector) {
-      float cosX = cos(euler.x);
-      float sinX = sin(euler.x);
-      mat3 rotationX = mat3(
-          1.0, 0.0, 0.0,
-          0.0, cosX, -sinX,
-          0.0, sinX, cosX
-      );
-
-      float cosY = cos(euler.y);
-      float sinY = sin(euler.y);
-      mat3 rotationY = mat3(
-          cosY, 0.0, sinY,
-          0.0, 1.0, 0.0,
-          -sinY, 0.0, cosY
-      );
-
-      float cosZ = cos(euler.z);
-      float sinZ = sin(euler.z);
-      mat3 rotationZ = mat3(
-          cosZ, -sinZ, 0.0,
-          sinZ, cosZ, 0.0,
-          0.0, 0.0, 1.0
-      );
-
-      // Apply rotations in ZYX order (yaw, pitch, roll)
-      vec3 rotatedVector = rotationZ * (rotationY * (rotationX * vector));
-
-      return rotatedVector;
-    }
-    
     
     float ray_intersects_sphere(vec3 eye, vec3 ray_dir, float sphere_radius, vec3 sphere_center) {
       /*
@@ -145,7 +104,7 @@ export function sunFragmentShader() {
     
       float discriminant = b * b - 4.0 * a * c;
       if (discriminant < 0.0) {
-        return MAX;
+        return -1.0;
       } else {
         return (-b - sqrt(discriminant)) / (2.0 * a);
       }
@@ -155,22 +114,19 @@ export function sunFragmentShader() {
     void main()
     {
       vec3 ray_dir = get_ray_dir(fov, resolution.xy, gl_FragCoord.xy);
-      ray_dir = rotateVectorWithQuaternion(camQuaternion, ray_dir);
       
-      float t = ray_intersects_sphere(cameraPosition, ray_dir, sphereRadius, sphereCenter);
+      float t = ray_intersects_sphere(cameraPosition, ray_dir, sphereRadius, sphereCenter + cameraPosition);
 
-      vec3 normal_v = normalize(ray_dir * t - vec3(0.0, 0.0, 1.0));
+      vec3 hit_point = ray_dir * t;
 
       vec3 color_yellow = vec3(1.0, 1.0, 1.0);
-      vec3 color_black = vec3(0.5, 0.7, 1.0);
-      vec3 a = 0.5 * (normal_v + 1.0);
-      if(t < MAX) {
-          gl_FragColor = vec4(a, 1.0);
+      vec3 color_red = vec3(0.5, 0.7, 1.0);
+      float a = 0.5 * (hit_point.y + 1.0);
+      vec3 lerped_color = (1.0 - a) * color_yellow + a * color_red;
+      if(t > 0.0) {
+          gl_FragColor = vec4(lerped_color, 1.0);
           return;
       }
-      float a_not_intersects = 0.5 * (normalize(ray_dir).y + 1.0);
-      vec3 lerped_color_not_intersects = 1.0 - a_not_intersects * color_black + a_not_intersects * color_yellow;
-      gl_FragColor = vec4(lerped_color_not_intersects, 1.0);
     }
   `;
 }

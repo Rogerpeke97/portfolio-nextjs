@@ -38,7 +38,7 @@ export class World {
   CAMERA_POSITION = new THREE.Vector3(0, 0, 0)
   constructor(canvas: HTMLCanvasElement) {
     this.resolution = new THREE.Vector2(canvas.clientWidth, canvas.clientHeight)
-    this.camera = new THREE.PerspectiveCamera(this.FOV, canvas.clientWidth / canvas.clientHeight, 0.1, this.FAR_PLANE)
+    this.camera = new THREE.PerspectiveCamera(this.FOV, canvas.clientWidth / canvas.clientHeight);
     this.renderer = new THREE.WebGLRenderer({ canvas })
     this.controls = new OrbitControls(this.camera, this.renderer.domElement)
     this.addPlanet()
