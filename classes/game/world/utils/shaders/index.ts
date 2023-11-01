@@ -117,16 +117,16 @@ export function sunFragmentShader() {
       
       float t = ray_intersects_sphere(cameraPosition, ray_dir, sphereRadius, sphereCenter + cameraPosition);
 
-      vec3 hit_point = ray_dir * t;
+      vec3 hit_point = cameraPosition + ray_dir * t;
+      vec3 hit_point_normal = normalize(hit_point);
 
-      vec3 color_yellow = vec3(1.0, 1.0, 1.0);
-      vec3 color_red = vec3(0.5, 0.7, 1.0);
-      float a = 0.5 * (hit_point.y + 1.0);
-      vec3 lerped_color = (1.0 - a) * color_yellow + a * color_red;
-      if(t > 0.0) {
-          gl_FragColor = vec4(lerped_color, 1.0);
-          return;
-      }
+      vec3 light_dir = vec3(-1.0, 0.9, -0.7);
+      float d = max(dot(hit_point_normal, light_dir), 0.0);
+
+      vec3 color_red = vec3(1.0, 0.0, 0.0);
+      gl_FragColor = vec4(color_red * d, 1.0);
     }
   `;
 }
+
+

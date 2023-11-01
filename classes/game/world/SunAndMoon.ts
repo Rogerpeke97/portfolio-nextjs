@@ -55,13 +55,13 @@ export class SunAndMoon {
     const sun = this.scene.getObjectByName('sun') as THREE.Mesh
     //@ts-ignore
     sun.material.uniforms.time.value = this.clock.getElapsedTime()
-    if (sun.position.x > 55) {
-      this.increasingVal *= -1
-    }
-    if (sun.position.x < -55) {
-      this.increasingVal *= -1
-    }
-    sun.position.x += this.increasingVal
+    // if (sun.position.x > 55) {
+    //   this.increasingVal *= -1
+    // }
+    // if (sun.position.x < -55) {
+    //   this.increasingVal *= -1
+    // }
+    // sun.position.x += this.increasingVal
     // sun.position.y += this.increasingVal
     // sun.position.z += this.increasingVal
   }

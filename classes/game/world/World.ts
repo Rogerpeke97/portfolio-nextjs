@@ -47,7 +47,7 @@ export class World {
     this.setKeyListeners()
     this.setCameraPositionAndAspect()
     this.setCameraControls()
-    this.addAmbientParticles()
+    // this.addAmbientParticles()
     this.renderScene()
     this.updateRendererAndCamera()
     this.trackWindowAndContainerResize()
@@ -71,7 +71,7 @@ export class World {
     planet.rotation.z = Math.PI / 2
     planet.receiveShadow = true
     planet.name = 'planet'
-    this.scene.add(planet)
+    // this.scene.add(planet)
   }
   private hasCollidedWithPlanet (vector: THREE.Vector3) {
     const planet = this.scene.getObjectByName('planet') as THREE.Mesh
@@ -198,7 +198,7 @@ export class World {
   }
   private renderScene() {
     this.renderer.render(this.scene, this.camera)
-    this.moveParticles()
+    // this.moveParticles()
     if(this.sunAndMoon?.update) {
       this.sunAndMoon.update()
     }
