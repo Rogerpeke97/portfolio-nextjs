@@ -56,7 +56,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
   
   vec3 light_dir = vec3(2.5, 4.05, -0.0);
   
-  vec3 color_red_yellow = vec3(1.0, 0.0, 0.0);
+  vec3 color_red = vec3(1.0, 0.7, 0.0);
   
   float d = max(dot(hit_point_normal, light_dir), 0.0);
 
