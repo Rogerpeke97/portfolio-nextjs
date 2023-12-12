@@ -1,4 +1,4 @@
-export function vertexShaderParticle(){
+export function vertexShaderParticle() {
   return `
     varying vec3 vColor;
     attribute vec3 customParticleColor;
@@ -25,10 +25,10 @@ export function vertexShaderParticle(){
       gl_PointSize = 80.0;
       gl_Position = perspectiveSpace; 
     }
-  `
+  `;
 }
 
-export function fragmentShaderParticle(){
+export function fragmentShaderParticle() {
   return `
     uniform float time;
     uniform vec2 resolution;
@@ -51,7 +51,7 @@ export function fragmentShaderParticle(){
       gl_FragColor = vec4(modifiedColor, 1.0);
       gl_FragColor = gl_FragColor * texture2D(particleTexture, gl_PointCoord);
     }
-  `
+  `;
 }
 
 export function sunVertexShader() {
@@ -62,7 +62,7 @@ export function sunVertexShader() {
     void main() {
       depth = -(modelViewMatrix * vec4(position.xyz, 1.)).xyz;
     }
-  `
+  `;
 }
 
 export function sunFragmentShader() {
@@ -71,22 +71,23 @@ export function sunFragmentShader() {
     uniform float sphereRadius;
     // uniform float sphereAtmosphereRadius;
     uniform vec2 resolution;
-    // uniform float time;
+    uniform float time;
     uniform float fov;
     const float MAX = 1000000.0;
+    const float PI = 3.1415926535897932384626433832795;
 
     vec3 get_ray_dir(float fov, vec2 resolution, vec2 fragCoord) {
       float aspect_ratio = resolution.x / resolution.y;
       
-      vec2 frag_coord_center = fragCoord - vec2(fragCoord.x * 0.5, fragCoord.y * 0.5);
-    
-      vec2 pixel_coord_center = frag_coord_center / resolution * 0.5;
+      vec2 frag_coord_center = fragCoord - resolution * 0.5;
+
+      vec2 pixel_coord_center = frag_coord_center / (resolution * 0.5);
     
       pixel_coord_center.x *= aspect_ratio;
     
       float z = 1.0 / tan(radians(fov * 0.5));
     
-      return vec3(pixel_coord_center, -z);
+      return vec3(pixel_coord_center, z);
     }
     
     float ray_intersects_sphere(vec3 eye, vec3 ray_dir, float sphere_radius, vec3 sphere_center) {
@@ -99,8 +100,8 @@ export function sunFragmentShader() {
         C = [(xo - a)^2 + (yo - b)^2 + (zo - c^)2 - r^2]
       */
       float a = dot(ray_dir, ray_dir);
-      float b = 2.0 * dot(ray_dir, eye - sphere_center);
-      float c = dot(eye - sphere_center, eye - sphere_center) - sphere_radius * sphere_radius;
+      float b = 2.0 * dot(ray_dir, eye + sphere_center);
+      float c = dot(eye + sphere_center, eye + sphere_center) - sphere_radius * sphere_radius;
     
       float discriminant = b * b - 4.0 * a * c;
       if (discriminant < 0.0) {
@@ -113,20 +114,36 @@ export function sunFragmentShader() {
     
     void main()
     {
+      float sphere_radius = sphereRadius;
+      vec3 sphere_center = sphereCenter;
+
+      vec3 camera_position = cameraPosition;
+
       vec3 ray_dir = get_ray_dir(fov, resolution.xy, gl_FragCoord.xy);
       
-      float t = ray_intersects_sphere(cameraPosition, ray_dir, sphereRadius, sphereCenter + cameraPosition);
+      float t = ray_intersects_sphere(camera_position, ray_dir, sphere_radius, sphere_center);
 
-      vec3 hit_point = cameraPosition + ray_dir * t;
-      vec3 hit_point_normal = normalize(hit_point);
+      vec3 hit_point = normalize(sphere_center + ray_dir * t);
 
-      vec3 light_dir = vec3(-1.0, 0.9, -0.7);
-      float d = max(dot(hit_point_normal, light_dir), 0.0);
+      vec3 sphere_normal = normalize(hit_point - sphere_center);
+  
+      vec3 light_dir = vec3(0.0, 0., 0.);
 
-      vec3 color_red = vec3(1.0, 0.7, 0.0);
-      gl_FragColor = vec4(color_red * d, 1.0);
+      float d = max(dot(hit_point, light_dir), 0.0);
+
+      float oscillating_val = 0.2 * sin(time * 0.5 * PI);
+        
+      //light_dir.z -= oscillating_val;
+
+      float light_intensity = dot(light_dir, sphere_normal);
+      
+      vec3 color_red = vec3(1.0, 0.7, 0.0) * light_intensity;
+      
+      if(t > 0.0) {
+          gl_FragColor = vec4(color_red * d, 1.0);
+          
+          return;
+      }
     }
   `;
 }
-
-

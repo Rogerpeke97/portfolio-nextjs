@@ -1,7 +1,5 @@
-import * as THREE from 'three';
-import { sunFragmentShader, sunVertexShader } from './utils/shaders';
-
-
+import * as THREE from "three";
+import { sunFragmentShader } from "./utils/shaders";
 
 export class SunAndMoon {
   scene: THREE.Scene;
@@ -11,16 +9,16 @@ export class SunAndMoon {
   fov: number;
   farPlane: number;
   SPHERE_RADIUS = 20;
-  STARTING_POSITION = new THREE.Vector3(0, 0, -60);
+  STARTING_POSITION = new THREE.Vector3(0, 0.0, -60.0);
   increasingVal = 0.45;
 
   constructor(
-    scene: THREE.Scene, 
+    scene: THREE.Scene,
     clock: THREE.Clock,
     camera: THREE.Camera,
-    resolution: THREE.Vector2, 
+    resolution: THREE.Vector2,
     fov: number,
-    farPlane: number,
+    farPlane: number
   ) {
     this.scene = scene;
     this.clock = clock;
@@ -32,8 +30,8 @@ export class SunAndMoon {
   }
 
   createSun() {
-    const sunGeometry = new THREE.SphereGeometry(this.SPHERE_RADIUS, 50, 50)
-    const sunMaterial = new THREE.ShaderMaterial({ 
+    const sunGeometry = new THREE.SphereGeometry(this.SPHERE_RADIUS, 50, 50);
+    const sunMaterial = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: this.clock.getElapsedTime() },
         resolution: { value: this.resolution },
@@ -41,27 +39,32 @@ export class SunAndMoon {
         sphereRadius: { value: this.SPHERE_RADIUS },
         fov: { value: this.fov },
       },
-      // vertexShader: sunVertexShader(),
+      //   vertexShader: sunVertexShader(),
       fragmentShader: sunFragmentShader(),
-    })
-    const sun = new THREE.Mesh(sunGeometry, sunMaterial)
-    sun.position.set(this.STARTING_POSITION.x, this.STARTING_POSITION.y, this.STARTING_POSITION.z)
-    
-    sun.name = 'sun'
-    this.scene.add(sun)
+    });
+    const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+    sun.position.set(
+      this.STARTING_POSITION.x,
+      this.STARTING_POSITION.y,
+      this.STARTING_POSITION.z
+    );
+
+    sun.name = "sun";
+    this.scene.add(sun);
   }
 
   public update() {
-    const sun = this.scene.getObjectByName('sun') as THREE.Mesh
+    const sun = this.scene.getObjectByName("sun") as THREE.Mesh;
     //@ts-ignore
-    sun.material.uniforms.time.value = this.clock.getElapsedTime()
+    sun.material.uniforms.time.value = this.clock.getElapsedTime();
     // if (sun.position.x > 55) {
-    //   this.increasingVal *= -1
+    //   this.increasingVal *= -1;
     // }
     // if (sun.position.x < -55) {
-    //   this.increasingVal *= -1
+    //   this.increasingVal *= -1;
     // }
-    // sun.position.x += this.increasingVal
+    // sun.position.x += this.increasingVal;
+    // sun.material.uniforms.sphereCenter.value = sun.position;
     // sun.position.y += this.increasingVal
     // sun.position.z += this.increasingVal
   }
